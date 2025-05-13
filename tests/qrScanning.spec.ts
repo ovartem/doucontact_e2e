@@ -2,6 +2,7 @@ import { test, expect } from '@playwright/test';
 import { MainPage } from '../pageObjects/Main.page';
 import { AddContactPage } from '../pageObjects/AddContact.page';
 import { ContactsPage } from '../pageObjects/Contacts.page';
+import { launchBrowserWithFakeMedia } from '../otherBrowserInstance/launchBrowser';
 
 test('Add default contact with all data without profile creation', async ({ page, browser }) => {
   const mainPage = new MainPage(page);
