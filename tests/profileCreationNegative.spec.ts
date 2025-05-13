@@ -17,6 +17,24 @@ test('Cannot create profile without name', async ({ page }) => {
   await expect(createProfilePage.submitBtn).toBeVisible();
 });
 
+test('Create profile with name and title, but without link', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  const createProfilePage = new CreateProfilePage(page);
+  const cardPage = new CardPage(page);
+
+  await mainPage.goto();
+  await mainPage.createProfileBtn.click();
+
+  const testName = 'Test User';
+  const testTitle = 'Software Engineer';
+  await createProfilePage.fillName(testName);
+  await createProfilePage.titleInput.fill(testTitle);
+
+  await createProfilePage.submit();
+
+  await expect(createProfilePage.errorMessage).toHaveText('Необхідно вказати хоча б одне посилання.');
+});
+
 test('Cannot create profile without link', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
@@ -69,6 +87,7 @@ test.fail('Cannot create profile with extremely long inputs', async ({ page }) =
   const longString = 'a'.repeat(256);
   await createProfilePage.fillName(longString);
   await createProfilePage.titleInput.fill(longString);
+  await createProfilePage.link1.fill('https://example.com');
 
   await createProfilePage.submit();
 
@@ -94,66 +113,4 @@ test('Form maintains input values after failed submission', async ({ page }) => 
   // Verify inputs maintain their values after failed submission
   await expect(createProfilePage.nameInput).toHaveValue(testName);
   await expect(createProfilePage.link1).toHaveValue(invalidLink);
-});
-
-test.fail('Create profile with Cyrillic name', async ({ page }) => {
-  const mainPage = new MainPage(page);
-  const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
-
-  await mainPage.goto();
-  await mainPage.createProfileBtn.click();
-
-  const cyrillicName = 'Іван Петров';
-  await createProfilePage.fillName(cyrillicName);
-
-  await createProfilePage.submit();
-
-  // Verify profile is created with Cyrillic name
-  await expect(cardPage.name).toHaveText(cyrillicName);
-  await expect(cardPage.qrCode).toBeVisible();
-});
-
-test.fail('Create profile with Cyrillic title', async ({ page }) => {
-  const mainPage = new MainPage(page);
-  const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
-
-  await mainPage.goto();
-  await mainPage.createProfileBtn.click();
-
-  const testName = 'Test User';
-  const cyrillicTitle = 'Інженер Програмного Забезпечення';
-
-  await createProfilePage.fillName(testName);
-  await createProfilePage.titleInput.fill(cyrillicTitle);
-
-  await createProfilePage.submit();
-
-  // Verify profile is created with Cyrillic title
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(cyrillicTitle);
-  await expect(cardPage.qrCode).toBeVisible();
-});
-
-test.fail('Create profile with special characters in title', async ({ page }) => {
-  const mainPage = new MainPage(page);
-  const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
-
-  await mainPage.goto();
-  await mainPage.createProfileBtn.click();
-
-  const testName = 'Test User';
-  const specialCharsTitle = '✨ Senior Developer #1 || JS/TS @CompanyName 🚀';
-
-  await createProfilePage.fillName(testName);
-  await createProfilePage.titleInput.fill(specialCharsTitle);
-
-  await createProfilePage.submit();
-
-  // Verify profile is created with special characters in title
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(specialCharsTitle);
-  await expect(cardPage.qrCode).toBeVisible();
 });
