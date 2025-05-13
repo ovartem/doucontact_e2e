@@ -37,16 +37,17 @@ test('Add default contact with all data without profile creation', async ({ page
   // Take photo and save
   await addContactPage.takePhotoAndSave.click();
 
+  // TODO: add verification of the saved contact
+});
 
 
+test.skip('Scan profile', async () => {
+  const { page } = await launchBrowserWithFakeMedia('screenshot_2sec.mjpeg');
+  const mainPage = new MainPage(page);
+  const contactsPage = new ContactsPage(page);
 
-
-  // const pixel5Context = await browser.newContext({
-  //   viewport: { width: 393, height: 851 },
-  //   deviceScaleFactor: 2.75,
-  //   isMobile: true,
-  //   hasTouch: true,
-  //   userAgent: 'Mozilla/5.0 (Linux; Android 12; Pixel 5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.41 Mobile Safari/537.36'
-  // });
-  // const page2 = await pixel5Context.newPage();
+  await mainPage.goto();
+  await mainPage.contactsBtn.click();
+  await contactsPage.addContactBtn.click();
+  console.log('test');
 });
