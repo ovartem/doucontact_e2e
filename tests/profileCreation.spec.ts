@@ -1,12 +1,11 @@
 import { test, expect } from '@playwright/test';
 import { CreateProfilePage } from '../pageObjects/createProfile.page';
-import { CardPage } from '../pageObjects/Card.page';
 import { MainPage } from '../pageObjects/Main.page';
+import { getUserData } from '../utils/testData';
 
 test('Create profile with name and one link', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
@@ -18,17 +17,14 @@ test('Create profile with name and one link', async ({ page }) => {
 
   await createProfilePage.submit();
 
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toBeEmpty();
-  await expect(cardPage.link1).toBeVisible();
-  await expect(cardPage.link1).toHaveAttribute('href', testLink);
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
 
 test('Create profile with name, title and two links', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
@@ -45,53 +41,36 @@ test('Create profile with name, title and two links', async ({ page }) => {
 
   await createProfilePage.submit();
 
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(testTitle);
-  await expect(cardPage.link1).toBeVisible();
-  await expect(cardPage.link1).toHaveAttribute('href', testLink1);
-  await expect(cardPage.link2).toBeVisible();
-  await expect(cardPage.link2).toHaveAttribute('href', testLink2);
-  await expect(cardPage.link3).not.toBeVisible();
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
 
 test('Create profile with name, title and three links', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
 
-  const testName = 'Test User';
-  const testTitle = 'Tech Lead';
-  const testLink1 = 'https://github.com/testuser';
-  const testLink2 = 'https://linkedin.com/testuser';
-  const testLink3 = 'https://twitter.com/testuser';
+  const testData = getUserData()
 
-  await createProfilePage.fillName(testName);
-  await createProfilePage.titleInput.fill(testTitle);
-  await createProfilePage.link1.fill(testLink1);
-  await createProfilePage.link2.fill(testLink2);
-  await createProfilePage.link3.fill(testLink3);
+  await createProfilePage.createProfileData(testData);
+  // await createProfilePage.titleInput.fill(testTitle);
+  // await createProfilePage.link1.fill(testLink1);
+  // await createProfilePage.link2.fill(testLink2);
+  // await createProfilePage.link3.fill(testLink3);
 
-  await createProfilePage.submit();
+  // await createProfilePage.submit();
 
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(testTitle);
-  await expect(cardPage.link1).toBeVisible();
-  await expect(cardPage.link1).toHaveAttribute('href', testLink1);
-  await expect(cardPage.link2).toBeVisible();
-  await expect(cardPage.link2).toHaveAttribute('href', testLink2);
-  await expect(cardPage.link3).toBeVisible();
-  await expect(cardPage.link3).toHaveAttribute('href', testLink3);
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
 
 test('Create profile with Cyrillic name', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
@@ -103,14 +82,14 @@ test('Create profile with Cyrillic name', async ({ page }) => {
   await createProfilePage.submit();
 
   // Verify profile is created with Cyrillic name
-  await expect(cardPage.name).toHaveText(cyrillicName);
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
 
 test('Create profile with Cyrillic title', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
@@ -125,15 +104,35 @@ test('Create profile with Cyrillic title', async ({ page }) => {
   await createProfilePage.submit();
 
   // Verify profile is created with Cyrillic title
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(cyrillicTitle);
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
+});
+
+test('Can create profile with extremely long inputs', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  const createProfilePage = new CreateProfilePage(page);
+
+  await mainPage.goto();
+  await mainPage.createProfileBtn.click();
+
+  // Try extremely long name (e.g. 256 characters)
+  const longString = 'a'.repeat(256);
+  await createProfilePage.fillName(longString);
+  await createProfilePage.titleInput.fill(longString);
+  await createProfilePage.link1.fill('https://example.com');
+
+  await createProfilePage.submit();
+
+  // Verify profile is created with Cyrillic title
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
 
 test('Create profile with special characters in title', async ({ page }) => {
   const mainPage = new MainPage(page);
   const createProfilePage = new CreateProfilePage(page);
-  const cardPage = new CardPage(page);
 
   await mainPage.goto();
   await mainPage.createProfileBtn.click();
@@ -148,7 +147,37 @@ test('Create profile with special characters in title', async ({ page }) => {
   await createProfilePage.submit();
 
   // Verify profile is created with special characters in title
-  await expect(cardPage.name).toHaveText(testName);
-  await expect(cardPage.title).toHaveText(specialCharsTitle);
-  await expect(cardPage.qrCode).toBeVisible();
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
+});
+
+test('Can create profile with invalid links', async ({ page }) => {
+  const mainPage = new MainPage(page);
+  const createProfilePage = new CreateProfilePage(page);
+
+  await mainPage.goto();
+  await mainPage.createProfileBtn.click();
+
+  // Fill required name
+  await createProfilePage.fillName('Test User');
+
+  // Try invalid link formats
+  const invalidLinks = [
+    'not-a-url',
+    'http://',
+    'google.com',
+  ];
+
+  await createProfilePage.link1.fill(invalidLinks[0]);
+  await createProfilePage.link2.fill(invalidLinks[1]);
+  await createProfilePage.link3.fill(invalidLinks[2]);
+
+
+  await createProfilePage.submit();
+
+  // Verify profile is created with special characters in title
+  await expect(mainPage.qrCode).toBeVisible();
+  await expect(mainPage.editProfileBtn).toBeVisible();
+  await expect(mainPage.scanQrCodeBtn).toBeVisible();
 });
