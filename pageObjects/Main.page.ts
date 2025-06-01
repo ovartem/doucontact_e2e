@@ -1,28 +1,23 @@
-import { Page, Locator } from '@playwright/test';
-import { CardPage } from './Card.page';
+import { Locator, expect } from '@playwright/test';
+import { PageHolder } from './PageHolder.page';
 
-export class MainPage {
-    readonly page: Page;
+export class MainPage extends PageHolder {
 
-    readonly myProfileBtn: Locator;
-    readonly contactsBtn: Locator;
-    readonly createProfileBtn: Locator;
-    readonly qrCode: Locator;
-    readonly editProfileBtn: Locator;
-    readonly scanQrCodeBtn: Locator;
+    readonly createProfileBtn: Locator = this.page.locator('[href="/edit"]');
+    readonly qrCode: Locator = this.page.locator('img.qr-code');
+    readonly editProfileBtn: Locator = this.page.getByRole('link', { name: 'Редагувати мою картку' });
+    readonly scanQrCodeBtn: Locator = this.page.getByRole('link', { name: 'QR Code Сканувати' });;
 
-    constructor(page: Page) {
-        this.page = page;
-        this.myProfileBtn = page.locator('[href="/"]');
-        this.contactsBtn = page.locator('[href="/contacts"]');
-        this.createProfileBtn = page.locator('[href="/edit"]');
 
-        this.qrCode = page.getByRole('img', { name: 'QR Code' });
-        this.editProfileBtn = page.getByRole('link', { name: 'Редагувати мої дані' });
-        this.scanQrCodeBtn = page.getByRole('link', { name: 'Відсканувати QR' });
+    async goto(): Promise<void> {
+        await this.page.goto('/'); // https://kartka.app https://doucontact.netlify.app
+    }
+    async verifyQrCodeAndButtons(): Promise<void> {
+        await expect(this.qrCode).toBeVisible();
+        await expect(this.editProfileBtn).toBeVisible();
+        await expect(this.scanQrCodeBtn).toBeVisible();
     }
 
-    async goto() {
-        await this.page.goto('https://kartka.app'); // https://doucontact.netlify.app
-    }
+
+
 }

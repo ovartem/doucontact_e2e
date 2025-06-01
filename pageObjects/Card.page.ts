@@ -1,26 +1,22 @@
 import { Page, Locator } from '@playwright/test';
+import { PageHolder } from './PageHolder.page';
+export class CardPage extends PageHolder {
 
-export class CardPage {
-    readonly page: Page;
 
-    readonly contactsBtn: Locator;
-    readonly name: Locator;
-    readonly title: Locator;
-    readonly link1: Locator;
-    readonly link2: Locator;
-    readonly link3: Locator;
-    readonly qrCode: Locator;
-    readonly addContactBtn: Locator;
 
-    constructor(page: Page) {
-        this.page = page;
-        this.contactsBtn = page.locator('nav [href="/contacts"]');
-        this.name = page.locator('.card h2');
-        this.title = page.locator('.card p').nth(0);
-        this.link1 = page.locator('.card a:not(.button)').nth(0);
-        this.link2 = page.locator('.card a:not(.button)').nth(1);
-        this.link3 = page.locator('.card a:not(.button)').nth(2);
-        this.qrCode = page.locator('.card .qr-code');
-        this.addContactBtn = page.locator('.button.fab')
-    }
+    readonly name: Locator = this.page.locator('h4.text-lg');
+    readonly title: Locator = this.page.locator('.card p').nth(0);
+    readonly link1: Locator = this.page.locator('.card a:not(.button)').nth(0);
+    readonly link2: Locator = this.page.locator('.card a:not(.button)').nth(1);
+    readonly link3: Locator = this.page.locator('.card a:not(.button)').nth(2);
+    readonly links: Locator = this.page.locator('.card a:not(.button)');
+    readonly note: Locator = this.page.getByRole('textbox');
+    readonly deleteButton: Locator = this.page.getByRole('button', { name: 'Видалити картку' });
+    readonly confirmDeleteButton: Locator = this.page.getByRole('button', { name: 'Так' });
+
+    async getLinks(): Promise<string[]> {
+        return await this.links.allTextContents();
+    };
+
+
 }

@@ -1,0 +1,26 @@
+{
+  "savedContacts": [
+    {
+      "id": "946d10e8",
+      "name": "MyName",
+      "title": "Qa",
+      "image": "",
+      "links": ["1", "2", "3"],
+      "note": "My note"
+    },
+    {
+      "id": "9dc3af86",
+      "name": "Kyrylo",
+      "title": "Test",
+      "image": "",
+      "links": ["2Tg", "Inst", "Mylink"]
+    },
+    {
+      "id": "ecddc841",
+      "name": "Ivan",
+      "title": "Automation",
+      "image": "",
+      "links": ["2Tg", "Mylink", "https://google.com"]
+    }
+  ]
+}
