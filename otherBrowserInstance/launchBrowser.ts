@@ -1,6 +1,7 @@
-const { chromium } = require('@playwright/test');
+import { chromium } from '@playwright/test';
 
 export async function launchBrowserWithFakeMedia(filePath) {
+    console.log('[launchBrowser] Using fake video from:', filePath);
   const browser = await chromium.launch({
     args: ['--disable-web-security',
             '--use-fake-ui-for-media-stream',

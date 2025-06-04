@@ -1,8 +1,12 @@
 import ffmpeg from 'fluent-ffmpeg';
-import * as path from 'path';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import ffmpegInstaller from '@ffmpeg-installer/ffmpeg';
 
-// Set FFmpeg path
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const ffmpegPath = ffmpegInstaller.path;
 ffmpeg.setFfmpegPath(ffmpegPath);
 
 function createVideoFromImage(
@@ -38,13 +42,13 @@ function createVideoFromImage(
 
 // Example usage
 export async function main(jpgFilePath: string, outputFilePath: string) {
-    const inputImage = path.join(__dirname, jpgFilePath);
-    const outputVideo = path.join(__dirname, outputFilePath);
+  const inputImage = path.join(__dirname, jpgFilePath);  
+  const outputVideo = path.join(__dirname, outputFilePath);
 
-    try {
-        await createVideoFromImage(inputImage, outputVideo);
-        console.log('Video created successfully');
-    } catch (error) {
-        console.error('Failed to create video:', error);
-    }
+  try {
+    await createVideoFromImage(inputImage, outputVideo);
+    console.log('Video created successfully');
+  } catch (error) {
+    console.error('Failed to create video:', error);
+  }
 }

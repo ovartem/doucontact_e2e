@@ -1,0 +1,16 @@
+{
+  "savedContacts": [
+    {
+      "id": "ecddc841",
+      "name": "Ivan",
+      "title": "Automation",
+      "image": "",
+      "links": [
+        "2Tg",
+        "Mylink",
+        "https://google.com"
+      ],
+      "note": "My note"
+    }
+  ]
+}

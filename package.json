@@ -1,6 +1,7 @@
 {
   "name": "doucontact_e2e",
   "version": "1.0.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
@@ -8,9 +9,16 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@eslint/js": "^9.27.0",
     "@faker-js/faker": "^9.7.0",
     "@playwright/test": "^1.52.0",
-    "@types/node": "^22.15.17"
+    "@types/node": "^22.15.17",
+    "@typescript-eslint/eslint-plugin": "^8.33.0",
+    "@typescript-eslint/parser": "^8.33.0",
+    "eslint": "^9.27.0",
+    "eslint-plugin-playwright": "^2.2.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.0"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
